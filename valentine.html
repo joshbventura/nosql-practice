@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>valentine?</title>
+
+  <!-- reuse your theme -->
+  <link rel="stylesheet" href="./style.css?v=999" />
+
+  <style>
+    /* page-specific tweaks */
+    .val-card { min-height: 520px; }
+    .val-wrap { text-align:center; }
+
+    .val-question{
+      margin-top: 10px;
+      font-size: clamp(22px, 2.4vw, 34px);
+      font-weight: 900;
+      color: rgba(255,230,243,0.92);
+    }
+
+    .val-sub{
+      margin-top: 10px;
+      color: rgba(255,230,243,0.70);
+      font-weight: 800;
+    }
+
+    .btnStack{
+      position: relative;
+      margin: 26px auto 0;
+      width: min(520px, 100%);
+      min-height: 220px;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    /* make the YES button extra irresistible */
+    .btnBig{
+      width: 100%;
+      max-width: 420px;
+      font-size: 18px;
+      padding: 16px 20px;
+    }
+
+    /* NO button can move inside this box */
+    #noBtn{
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .successMsg{
+      margin-top: 18px;
+      font-weight: 900;
+      color: rgba(255,230,243,0.85);
+    }
+  </style>
+
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn  = document.getElementById("noBtn");
+      const msg    = document.getElementById("msg");
+      const arena  = document.getElementById("arena");
+
+      function moveNo() {
+        const pad = 12;
+
+        // make sure it's positioned to move
+        noBtn.style.position = "absolute";
+
+        const arenaRect = arena.getBoundingClientRect();
+        const btnW = noBtn.offsetWidth;
+        const btnH = noBtn.offsetHeight;
+
+        const maxX = arenaRect.width - btnW - pad;
+        const maxY = arenaRect.height - btnH - pad;
+
+        const x = Math.max(pad, Math.random() * maxX);
+        const y = Math.max(pad, Math.random() * maxY);
+
+        noBtn.style.left = x + "px";
+        noBtn.style.top  = y + "px";
+      }
+
+      // dodge behavior
+      noBtn.addEventListener("mouseenter", moveNo);
+      noBtn.addEventListener("click", moveNo);
+
+      // YES behavior
+      yesBtn.addEventListener("click", () => {
+        msg.textContent = "YAYYYYY 💗 okay you’re officially my valentine 😭💘";
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+
+        // optional: store another flag if you want later
+        localStorage.setItem("adnan_valentine_yes", "true");
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card val-card">
+      <div class="val-wrap">
+        <div class="pill" style="margin: 0 auto;">
+          <span class="dot"></span>
+          quest complete ✅ reward unlocked
+        </div>
+
+        <h1 class="title" style="margin-bottom: 10px;">Adnannypoo :)</h1>
+        <div class="val-question">will you be my valentine?</div>
+        <div class="val-sub">choose wisely 😇</div>
+
+        <div class="btnStack" id="arena">
+          <button class="btn primary btnBig" id="yesBtn" type="button">YES 💘</button>
+          <button class="btn ghost btnBig" id="noBtn" type="button">no 😐</button>
+        </div>
+
+        <div class="successMsg" id="msg"></div>
+
+        <div style="margin-top: 18px;">
+          <a class="btn ghost" href="./index.html" style="max-width: 260px; margin: 0 auto;">← back</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- reuse your hearts animation script -->
+  <script src="./script.js?v=999" defer></script>
+</body>
+</html>
