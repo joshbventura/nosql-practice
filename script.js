@@ -83,10 +83,32 @@ if (bgm && musicBtn) {
   }
 
 // ---- LOCK / UNLOCK LOGIC ----
-if (clickMore) {
-  const unlocked = localStorage.getItem("adnan_connections_unlocked") === "true";
+// ---- 3 KEY SYSTEM (connections + memory + quiz) ----
+const keyStatus = document.getElementById("keyStatus");
 
-  if (unlocked) {
+function getKeyCount() {
+  const keys = [
+    localStorage.getItem("key_connections") === "true",
+    localStorage.getItem("key_memory") === "true",
+    localStorage.getItem("key_quiz") === "true",
+  ];
+  return keys.filter(Boolean).length;
+}
+
+if (clickMore) {
+  const count = getKeyCount();
+  const total = 3;
+
+  if (keyStatus) {
+    const icons =
+      (localStorage.getItem("key_connections") === "true" ? "🔑" : "🗝️") + " " +
+      (localStorage.getItem("key_memory") === "true" ? "🔑" : "🗝️") + " " +
+      (localStorage.getItem("key_quiz") === "true" ? "🔑" : "🗝️");
+
+    keyStatus.textContent = `Keys: ${count}/${total} ${icons} ${count === total ? "🔓" : "🔒"}`;
+  }
+
+  if (count === total) {
     clickMore.disabled = false;
     clickMore.classList.remove("locked");
     clickMore.textContent = "click for more 💗";
@@ -97,8 +119,10 @@ if (clickMore) {
   } else {
     clickMore.disabled = true;
     clickMore.classList.add("locked");
-    clickMore.textContent = "🔒 locked — solve connections";
+    clickMore.textContent = `🔒 locked — collect ${total} keys`;
   }
+}
+
 }
 
 });
