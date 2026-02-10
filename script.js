@@ -2,23 +2,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== HEARTS BACKGROUND =====
   const heartsWrap = document.getElementById("hearts");
   // ---- MUSIC ----
+// ---- MUSIC CONTINUOUS SYSTEM ----
 const bgm = document.getElementById("bgm");
 const musicBtn = document.getElementById("musicBtn");
 
 if (bgm && musicBtn) {
-  bgm.volume = 0.2; // keep it soft
+  bgm.volume = 0.2;
 
-  musicBtn.addEventListener("click", async () => {
+  // restore last time
+  const savedTime = localStorage.getItem("music_time");
+  if (savedTime) bgm.currentTime = parseFloat(savedTime);
+
+  // auto resume if it was on before
+  const wasOn = localStorage.getItem("music_on") === "true";
+  if (wasOn) bgm.play().catch(() => {});
+
+  // save time while playing
+  setInterval(() => {
+    if (!bgm.paused) localStorage.setItem("music_time", String(bgm.currentTime));
+  }, 700);
+
+  // toggle
+  musicBtn.textContent = wasOn ? "🔇 mute music" : "🎵 play music";
+
+  musicBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
     try {
       if (bgm.paused) {
         await bgm.play();
+        localStorage.setItem("music_on", "true");
         musicBtn.textContent = "🔇 mute music";
       } else {
         bgm.pause();
+        localStorage.setItem("music_on", "false");
         musicBtn.textContent = "🎵 play music";
       }
-    } catch (e) {
-      console.log("Audio blocked until user interaction");
+    } catch (err) {
+      console.log("Audio play failed:", err);
     }
   });
 }
