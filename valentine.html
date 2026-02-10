@@ -1,138 +1,145 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>valentine?</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adnannypoo :)</title>
+<link rel="stylesheet" href="style.css" />
 
-  <!-- reuse your theme -->
-  <link rel="stylesheet" href="./style.css?v=999" />
+<style>
+.val-wrap{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:48px 18px;
+}
 
-  <style>
-    /* page-specific tweaks */
-    .val-card { min-height: 520px; }
-    .val-wrap { text-align:center; }
+.val-card{
+  width:min(760px,92vw);
+  padding:48px 32px 40px;
+  border-radius:34px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow:0 30px 80px rgba(0,0,0,0.55);
+  backdrop-filter:blur(12px);
+  text-align:center;
+}
 
-    .val-question{
-      margin-top: 10px;
-      font-size: clamp(22px, 2.4vw, 34px);
-      font-weight: 900;
-      color: rgba(255,230,243,0.92);
-    }
+.val-title{
+  font-size: clamp(38px, 6vw, 64px);
+  color: var(--pink2);
+  margin-bottom:10px;
+}
 
-    .val-sub{
-      margin-top: 10px;
-      color: rgba(255,230,243,0.70);
-      font-weight: 800;
-    }
+.val-sub{
+  color: rgba(255,230,243,0.75);
+  font-weight:800;
+  margin-bottom:26px;
+}
 
-    .btnStack{
-      position: relative;
-      margin: 26px auto 0;
-      width: min(520px, 100%);
-      min-height: 220px;
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-      align-items:center;
-      justify-content:flex-start;
-    }
+.btnStack{
+  position: relative;
+  margin: 30px auto 0;
+  width: min(520px, 100%);
+  display:flex;
+  flex-direction:column;
+  gap: 16px;
+  align-items:center;
+}
 
-    /* make the YES button extra irresistible */
-    .btnBig{
-      width: 100%;
-      max-width: 420px;
-      font-size: 18px;
-      padding: 16px 20px;
-    }
+/* NO playground */
+#arena{
+  position: relative;
+  width: 100%;
+  height: 170px;
+}
 
-    /* NO button can move inside this box */
-    #noBtn{
-      width: 100%;
-      max-width: 420px;
-    }
+#noBtn{
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 420px;
+  transition: left .12s ease, top .12s ease;
+}
 
-    .successMsg{
-      margin-top: 18px;
-      font-weight: 900;
-      color: rgba(255,230,243,0.85);
-    }
-  </style>
+#yesBtn{
+  width: 100%;
+  max-width: 420px;
+}
 
-  <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-      const yesBtn = document.getElementById("yesBtn");
-      const noBtn  = document.getElementById("noBtn");
-      const msg    = document.getElementById("msg");
-      const arena  = document.getElementById("arena");
-
-      function moveNo() {
-        const pad = 12;
-
-        // make sure it's positioned to move
-        noBtn.style.position = "absolute";
-
-        const arenaRect = arena.getBoundingClientRect();
-        const btnW = noBtn.offsetWidth;
-        const btnH = noBtn.offsetHeight;
-
-        const maxX = arenaRect.width - btnW - pad;
-        const maxY = arenaRect.height - btnH - pad;
-
-        const x = Math.max(pad, Math.random() * maxX);
-        const y = Math.max(pad, Math.random() * maxY);
-
-        noBtn.style.left = x + "px";
-        noBtn.style.top  = y + "px";
-      }
-
-      // dodge behavior
-      noBtn.addEventListener("mouseenter", moveNo);
-      noBtn.addEventListener("click", moveNo);
-
-      // YES behavior
-      yesBtn.addEventListener("click", () => {
-        msg.textContent = "YAYYYYY 💗 okay you’re officially my valentine 😭💘";
-        yesBtn.disabled = true;
-        noBtn.disabled = true;
-
-        // optional: store another flag if you want later
-        localStorage.setItem("adnan_valentine_yes", "true");
-      });
-    });
-  </script>
+.result{
+  margin-top:26px;
+  font-weight:900;
+  font-size: clamp(18px,2.5vw,22px);
+  color: var(--pink2);
+  min-height:30px;
+}
+</style>
 </head>
 
 <body>
-  <div class="hearts" id="hearts" aria-hidden="true"></div>
 
-  <main class="wrap">
-    <section class="card val-card">
-      <div class="val-wrap">
-        <div class="pill" style="margin: 0 auto;">
-          <span class="dot"></span>
-          quest complete ✅ reward unlocked
-        </div>
+<div class="wrap">
+  <div class="val-card">
+    <h1 class="val-title">Adnannypoo :)</h1>
+    <div class="val-sub">will you be my valentine?</div>
 
-        <h1 class="title" style="margin-bottom: 10px;">Adnannypoo :)</h1>
-        <div class="val-question">will you be my valentine?</div>
-        <div class="val-sub">choose wisely 😇</div>
-
-        <div class="btnStack" id="arena">
-          <button class="btn primary btnBig" id="yesBtn" type="button">YES 💘</button>
-          <button class="btn ghost btnBig" id="noBtn" type="button">no 😐</button>
-        </div>
-
-        <div class="successMsg" id="msg"></div>
-
-        <div style="margin-top: 18px;">
-          <a class="btn ghost" href="./index.html" style="max-width: 260px; margin: 0 auto;">← back</a>
-        </div>
+    <div class="btnStack">
+      <div id="arena">
+        <button class="btn ghost" id="noBtn" type="button">
+          no, die fatty 
+        </button>
       </div>
-    </section>
-  </main>
 
-  <!-- reuse your hearts animation script -->
-  <script src="./script.js?v=999" defer></script>
+      <button class="btn primary" id="yesBtn" type="button">
+        YES 💘
+      </button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <div style="margin-top:28px;">
+      <a href="index.html" class="btn ghost">← back</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const arena = document.getElementById("arena");
+const result = document.getElementById("result");
+
+function moveNo(){
+  const pad = 10;
+
+  const arenaRect = arena.getBoundingClientRect();
+  const btnW = noBtn.offsetWidth;
+  const btnH = noBtn.offsetHeight;
+
+  const maxX = arenaRect.width - btnW - pad;
+  const maxY = arenaRect.height - btnH - pad;
+
+  const x = pad + Math.random() * Math.max(0, maxX);
+  const y = pad + Math.random() * Math.max(0, maxY);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
+  noBtn.style.transform = "none";
+}
+
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("click", moveNo);
+
+yesBtn.addEventListener("click", () => {
+  result.textContent = "YAYYY 💗 I can’t wait to spend our first Valentine’s Day together.";
+  yesBtn.textContent = "you’re stuck with me by the glue forever 😌";
+  noBtn.style.display = "none";
+});
+</script>
+
 </body>
 </html>
+
