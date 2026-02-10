@@ -1,6 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
   // ===== HEARTS BACKGROUND =====
   const heartsWrap = document.getElementById("hearts");
+  // ---- MUSIC ----
+const bgm = document.getElementById("bgm");
+const musicBtn = document.getElementById("musicBtn");
+
+if (bgm && musicBtn) {
+  bgm.volume = 0.2; // keep it soft
+
+  musicBtn.addEventListener("click", async () => {
+    try {
+      if (bgm.paused) {
+        await bgm.play();
+        musicBtn.textContent = "🔇 mute music";
+      } else {
+        bgm.pause();
+        musicBtn.textContent = "🎵 play music";
+      }
+    } catch (e) {
+      console.log("Audio blocked until user interaction");
+    }
+  });
+}
 
   function spawnHeart() {
     if (!heartsWrap) return;
