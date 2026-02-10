@@ -214,7 +214,8 @@ btnSubmit.addEventListener("click", () => {
  if (solved.size === 4){
   msgEl.textContent = "you solved it… go back 😌💗";
 
-  localStorage.setItem("adnan_connections_unlocked", "true");
+  localStorage.setItem("key_connections", "true");
+
 
   btnSubmit.disabled = true;
 
