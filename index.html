@@ -1,67 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>notes</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>totally normal nosql practice</title>
+
+  <link rel="stylesheet" href="./style.css?v=7" />
+  <script src="./script.js?v=7" defer></script>
 </head>
 
 <body>
-  <!-- floating hearts background -->
-  <div class="hearts" id="hearts"></div>
+  <!-- animated hearts background -->
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
 
-  <div class="wrap">
-    <div class="card">
-      <div class="sparkle"></div>
+  <main class="wrap">
+    <section class="card" aria-label="love note">
+      <!-- sticker sprite pinned to this card -->
+      <img class="sticker sticker-left" src="./assets/dialogue_sprite.png" alt="" />
 
-      <div class="badge"><span class="dot"></span> totally normal nosql practice (definitely)</div>
+      <div class="pill">
+        <span class="dot"></span>
+        totally normal nosql practice (definitely)
+      </div>
 
-    <!-- Stickers (make sure this is INSIDE the card container) -->
-<img class="sticker sticker-left" src="assets/dialogue_sprite.png" alt="">
-<img class="sticker sticker-right" src="assets/memory_sprite.png" alt="">
+      <h1 class="title">Adnannypoo :)</h1>
+      <div class="subtitle">open when you miss me 💌</div>
 
-<h1 class="title">Adnannypoo :)</h1>
+      <p class="lede">
+        I lied to you. No company wants to see my SQL skills — I just wanted an excuse so you’d click this link.
+      </p>
 
-<div class="subtitle">open when you miss me 💌</div>
-
-<p class="lede">
-  I lied to you. No company wants to see my SQL skills — I just wanted an excuse so you’d click this link.
-</p>
-
-<div class="note-box long-note collapsed" id="note">
-  <p>
-    I just wanted you to know I’m really grateful for you and wanted to surprise you with something new.
-    This isn't the 3DS game port I had hoped, but I hope this still reminds you how much I love you.
-    You make me feel safe, seen, and loved in a way I have never been before. I’m proud of us for making
-    it this far and can’t wait for our promising future. I love you so so soooo much!!!
-  </p>
-</div>
-
-<div class="btn-row">
-  <button class="btn primary" id="clickMore">click for more 💗</button>
-  <button class="btn ghost" id="toggleNote">read more</button>
-  <a class="btn ghost" href="connections.html">play connections 🧩</a>
-</div>
-
-
-      <div class="hidden-note" id="hiddenNote">
+      <!-- long note -->
+      <div class="note-box long-note collapsed" id="note">
         <p>
-          If you’re reading this, it means I’m thinking about you (which is… always).
-          I love the way you exist. I love our little jokes. I love how you feel like home,
-          even from far away. I’m not going anywhere. You’re my favorite person.
+          I just wanted you to know I’m really grateful for you and wanted to surprise you with something new.
+          This isn't the 3DS game port I had hoped, but I hope this still reminds you how much I love you.
+          You make me feel safe, seen, and loved in a way I have never been before. I’m proud of us for making
+          it this far and can’t wait for our promising future. I love you so so soooo much!!!
         </p>
-        <p class="sig">— love, me 💞</p>
       </div>
 
-  
-
-      <div class="footer">
-        ps: if you found this page by accident… no you didn’t.
+      <div class="btn-row">
+        <button class="btn primary" id="clickMore" type="button">click for more 💗</button>
+        <button class="btn ghost" id="toggleNote" type="button">read more</button>
+        <a class="btn ghost" href="./connections.html">play connections 🧩</a>
       </div>
-    </div>
-  </div>
 
-  <script src="./script.js"></script>
+      <footer class="ps">ps: if you found this page by accident… no you didn’t.</footer>
+
+      <!-- second sprite, pinned bottom-right -->
+      <img class="sticker sticker-right" src="./assets/memory_sprite.png" alt="" />
+    </section>
+  </main>
 </body>
 </html>
