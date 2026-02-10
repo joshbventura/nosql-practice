@@ -261,3 +261,97 @@ button:hover{
   line-height: 1.6;
 }
 
+/* Make the card a positioning parent for stickers */
+.card, .nyt-card, .shell, .panel {
+  position: relative;
+  overflow: visible;
+}
+
+/* Better text readability */
+.lede, .note-box p {
+  max-width: 62ch;     /* prevents mega-wide lines = less “wall of text” */
+  line-height: 1.75;
+}
+
+.subtitle{
+  margin-top: 10px;
+  margin-bottom: 14px;
+  color: rgba(255, 230, 243, 0.75);
+  font-weight: 700;
+}
+
+/* Inner letter card */
+.note-box{
+  margin-top: 16px;
+  padding: 18px 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+/* Collapsible long note */
+.long-note.collapsed{
+  max-height: 110px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+
+/* Buttons not scrunched */
+.btn-row{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.btn-row > *{
+  flex: 1 1 auto;
+  min-width: 180px;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* If you already have button styles, keep them; these just help a bit */
+.btn{
+  border-radius: 999px;
+  padding: 12px 16px;
+}
+
+/* Stickers */
+.sticker{
+  position: absolute;
+  width: 120px;
+  height: auto;
+  opacity: 0.92;
+  filter: drop-shadow(0 12px 25px rgba(0,0,0,0.45));
+  pointer-events: none;
+}
+
+.sticker-left{
+  top: -55px;
+  left: -35px;
+  transform: rotate(-6deg);
+}
+
+.sticker-right{
+  bottom: -60px;
+  right: -40px;
+  width: 140px;
+  transform: rotate(6deg);
+  animation: floaty 3.2s ease-in-out infinite;
+}
+
+@keyframes floaty{
+  0%,100% { transform: translateY(0) rotate(6deg); }
+  50% { transform: translateY(-10px) rotate(6deg); }
+}
+
+/* Mobile tweaks */
+@media (max-width: 700px){
+  .sticker{ width: 90px; }
+  .sticker-right{ width: 105px; }
+  .sticker-left{ top: -40px; left: -18px; }
+  .sticker-right{ bottom: -45px; right: -18px; }
+  .btn-row > *{ min-width: 150px; }
+}
