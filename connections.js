@@ -211,10 +211,18 @@ btnSubmit.addEventListener("click", () => {
 
   selected.clear();
 
-  if (solved.size === 4){
-    msgEl.textContent = "You did it 🏆";
-    btnSubmit.disabled = true;
-  }
+ if (solved.size === 4){
+  msgEl.textContent = "you solved it… go back 😌💗";
+
+  localStorage.setItem("adnan_connections_unlocked", "true");
+
+  btnSubmit.disabled = true;
+
+  setTimeout(() => {
+    window.location.href = "./index.html";
+  }, 1400);
+}
+
 
   renderSolved();
   renderGrid();
