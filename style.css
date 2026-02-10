@@ -248,3 +248,122 @@ body{
   .sticker-right{ width: 115px; bottom:-52px; right: -10px; }
   .btn{ min-width: 150px; }
 }
+
+/* ===== NYT-like connections styling ===== */
+.nyt-card .nyt-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 10px;
+}
+
+.nyt-title{
+  font-weight:900;
+  letter-spacing:0.2px;
+  color: rgba(255,230,243,0.92);
+  font-size: clamp(18px, 2.2vw, 24px);
+  text-align:center;
+  flex:1;
+}
+
+.nyt-sub{
+  color: rgba(255,230,243,0.65);
+  margin-bottom: 18px;
+  font-weight:700;
+}
+
+.nyt-controls{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom: 18px;
+}
+
+.nyt-grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tile{
+  padding: 16px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,230,243,0.92);
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  cursor:pointer;
+  transition: transform .08s ease, border-color .15s ease, background .15s ease;
+  min-height: 58px;
+
+  /* IMPORTANT: prevent long text from bleeding */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tile:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.25);
+}
+
+.tile.selected{
+  background: rgba(255,111,182,0.16);
+  border-color: rgba(255,111,182,0.45);
+}
+
+.nyt-solved{
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.solved-row{
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+
+.solved-name{
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 6px;
+}
+
+.solved-items{
+  color: rgba(255,230,243,0.75);
+  font-weight: 700;
+}
+
+.solved-yellow{ background: rgba(255,225,120,0.10); border-color: rgba(255,225,120,0.25); }
+.solved-green{  background: rgba(140,255,180,0.10); border-color: rgba(140,255,180,0.25); }
+.solved-blue{   background: rgba(120,190,255,0.10); border-color: rgba(120,190,255,0.25); }
+.solved-purple{ background: rgba(200,140,255,0.10); border-color: rgba(200,140,255,0.25); }
+
+.nyt-footer{
+  margin-top: 14px;
+  text-align:center;
+}
+
+.nyt-msg{
+  color: rgba(255,230,243,0.72);
+  font-weight: 900;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+}
+.shake { animation: shake .2s ease-in-out 2; }
+
+@media (max-width: 700px){
+  .nyt-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
