@@ -22,8 +22,8 @@ if (hearts){
   Customize these 4 groups: 4 items each, 16 unique items total.
 */
 const GROUPS = [
-  { name: "things i love about adnan", color: "solved-yellow", items: ["SKIBIDI", "CARING", "LOYAL", "TOP 10"] },
-  { name: "our beloved games",                color: "solved-green",  items: ["MARVEL RIVALS", "PERSONA 5X", "OVERWATCH", "ARKNIGHTS"] },
+  { name: "things i love about adnan", color: "solved-yellow", items: ["SKIBIDI", "CARING", "LOYAL", "MOGGER"] },
+  { name: "our beloved games",                color: "solved-green",  items: ["MARVEL RIVALS", "PERSONA 5: THE PHANTOM X", "OVERWATCH", "ARKNIGHTS: ENDFIELD"] },
   { name: "places we have gooned passionately",               color: "solved-blue",   items: ["SCRANTON", "WILKES-BARRE", "WOODBRIDGE", "WHITE MARSH"] },
   { name: "songs that remind me of you",  color: "solved-purple", items: ["VERSACE ON THE FLOOR - BRUNO MARS", "MAN I NEED - OLIVIA DEAN", "MYSTERY OF LOVE - SUFJAN STEVENS", "AMAZING - REX ORANGE COUNTY"] },
 ];
