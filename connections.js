@@ -1,31 +1,41 @@
-/* --------- hearts background (same as your main page) --------- */
-const hearts = document.getElementById('hearts');
-if (hearts){
-  const COUNT = 22;
-  for (let i = 0; i < COUNT; i++){
-    const h = document.createElement('div');
-    h.className = 'heart';
-    h.style.left = Math.random() * 100 + 'vw';
-    h.style.bottom = (-10 - Math.random() * 30) + 'vh';
-    h.style.animationDuration = (8 + Math.random()*8) + 's';
-    h.style.animationDelay = (-Math.random()*10) + 's';
-    h.style.opacity = (0.25 + Math.random()*0.6);
-    const s = 10 + Math.random()*18;
-    h.style.width = s + 'px';
-    h.style.height = s + 'px';
+// music resume
+(function(){
+  const bgm = document.getElementById("bgm");
+  if (!bgm) return;
+  bgm.volume = 0.2;
+  const t = localStorage.getItem("music_time");
+  if (t) bgm.currentTime = parseFloat(t);
+  const wasOn = localStorage.getItem("music_on") === "true";
+  if (wasOn) bgm.play().catch(()=>{});
+  setInterval(() => {
+    if (!bgm.paused) localStorage.setItem("music_time", String(bgm.currentTime));
+  }, 700);
+})();
+
+// hearts (reuse)
+(function(){
+  const hearts = document.getElementById("hearts");
+  if (!hearts) return;
+  for (let i=0;i<22;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom=(-10-Math.random()*30)+"vh";
+    h.style.animationDuration=(8+Math.random()*8)+"s";
+    h.style.animationDelay=(-Math.random()*10)+"s";
+    h.style.opacity=(0.25+Math.random()*0.6);
+    const s=10+Math.random()*18;
+    h.style.width=s+"px"; h.style.height=s+"px";
     hearts.appendChild(h);
   }
-}
+})();
 
-/* --------- Connections (NYT-ish) --------- */
-/*
-  Customize these 4 groups: 4 items each, 16 unique items total.
-*/
+/* Customize groups */
 const GROUPS = [
-  { name: "things i love about adnan", color: "solved-yellow", items: ["SKIBIDI", "CARING", "LOYAL", "MOGGER"] },
-  { name: "our beloved games",                color: "solved-green",  items: ["MARVEL RIVALS", "PERSONA 5: THE PHANTOM X", "OVERWATCH", "ARKNIGHTS: ENDFIELD"] },
-  { name: "places we have gooned passionately",               color: "solved-blue",   items: ["SCRANTON", "WILKES-BARRE", "WOODBRIDGE", "WHITE MARSH"] },
-  { name: "songs that remind me of you",  color: "solved-purple", items: ["VERSACE ON THE FLOOR - BRUNO MARS", "MAN I NEED - OLIVIA DEAN", "MYSTERY OF LOVE - SUFJAN STEVENS", "AMAZING - REX ORANGE COUNTY"] },
+  { name: "things i love about adnan", color: "solved-yellow", items: ["CARING", "LOYAL", "SMART", "FUNNY"] },
+  { name: "our beloved games", color: "solved-green", items: ["MARVEL RIVALS", "PERSONA 5: THE PHANTOM X", "OVERWATCH", "ARKNIGHTS: ENDFIELD"] },
+  { name: "places we have been", color: "solved-blue", items: ["SCRANTON", "WILKES-BARRE", "WOODBRIDGE", "WHITE MARSH"] },
+  { name: "songs that remind me of you", color: "solved-purple", items: ["VERSACE ON THE FLOOR - BRUNO MARS", "MAN I NEED - OLIVIA DEAN", "MYSTERY OF LOVE - SUFJAN STEVENS", "AMAZING - REX ORANGE COUNTY"] },
 ];
 
 const gridEl = document.getElementById("nytGrid");
@@ -52,13 +62,11 @@ function shuffle(arr){
   }
   return arr;
 }
-
 function flatten(){
   const all = [];
   for (const g of GROUPS) for (const w of g.items) all.push(w);
   return all;
 }
-
 function escapeHtml(str){
   return String(str)
     .replaceAll("&", "&amp;")
@@ -85,8 +93,8 @@ function renderSolved(){
     const row = document.createElement("div");
     row.className = `solved-row ${g.color}`;
     row.innerHTML = `
-      <div>${escapeHtml(g.name.toUpperCase())}</div>
-      <div class="items">${g.items.map(escapeHtml).join(" · ")}</div>
+      <div class="solved-name">${escapeHtml(g.name)}</div>
+      <div class="solved-items">${g.items.map(escapeHtml).join(" · ")}</div>
     `;
     solvedEl.appendChild(row);
   }
@@ -99,7 +107,7 @@ function renderGrid(){
     if (locked.has(w)) continue;
 
     const tile = document.createElement("div");
-    tile.className = "nyt-tile";
+    tile.className = "tile";
     tile.textContent = w;
 
     if (selected.has(w)) tile.classList.add("selected");
@@ -122,7 +130,6 @@ function selectionMatchGroup(selArr){
   const sel = new Set(selArr);
   for (const g of GROUPS){
     if (solved.has(g.name)) continue;
-
     let c = 0;
     for (const w of sel) if (g.items.includes(w)) c++;
     if (c === 4) return g;
@@ -149,7 +156,7 @@ function lockGroup(g){
 
 function shakeGrid(){
   gridEl.classList.remove("shake");
-  void gridEl.offsetWidth; // reflow to restart animation
+  void gridEl.offsetWidth;
   gridEl.classList.add("shake");
   setTimeout(()=> gridEl.classList.remove("shake"), 500);
 }
@@ -211,19 +218,18 @@ btnSubmit.addEventListener("click", () => {
 
   selected.clear();
 
- if (solved.size === 4){
-  msgEl.textContent = "you solved it… go back 😌💗";
+  if (solved.size === 4){
+    msgEl.textContent = "You did it 🏆";
+    btnSubmit.disabled = true;
 
-  localStorage.setItem("key_connections", "true");
+    // ✅ key 1/3
+    localStorage.setItem("key_connections", "true");
 
-
-  btnSubmit.disabled = true;
-
-  setTimeout(() => {
-    window.location.href = "./index.html";
-  }, 1400);
-}
-
+    // go back home after a sec so the key counter updates
+    setTimeout(() => {
+      window.location.href = "./index.html";
+    }, 900);
+  }
 
   renderSolved();
   renderGrid();
