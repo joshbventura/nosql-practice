@@ -1,109 +1,119 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.getElementById("memGrid");
-  const movesEl = document.getElementById("moves");
-  const pairsEl = document.getElementById("pairs");
-  const msgEl = document.getElementById("memMsg");
-  const resetBtn = document.getElementById("resetMem");
+// music resume
+(function(){
+  const bgm = document.getElementById("bgm");
+  if (!bgm) return;
+  bgm.volume = 0.2;
+  const t = localStorage.getItem("music_time");
+  if (t) bgm.currentTime = parseFloat(t);
+  const wasOn = localStorage.getItem("music_on") === "true";
+  if (wasOn) bgm.play().catch(()=>{});
+  setInterval(() => {
+    if (!bgm.paused) localStorage.setItem("music_time", String(bgm.currentTime));
+  }, 700);
+})();
 
-  const photos = [
-    "./assets/us1.png",
-    "./assets/us2.png",
-    "./assets/us3.png",
-    "./assets/us4.png",
-    "./assets/us5.png",
-    "./assets/us6.png",
-  ];
-
-  function shuffle(a){
-    a = [...a];
-    for (let i=a.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
-    }
-    return a;
+// hearts
+(function(){
+  const hearts = document.getElementById("hearts");
+  if (!hearts) return;
+  for (let i=0;i<22;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom=(-10-Math.random()*30)+"vh";
+    h.style.animationDuration=(8+Math.random()*8)+"s";
+    h.style.animationDelay=(-Math.random()*10)+"s";
+    h.style.opacity=(0.25+Math.random()*0.6);
+    const s=10+Math.random()*18;
+    h.style.width=s+"px"; h.style.height=s+"px";
+    hearts.appendChild(h);
   }
+})();
 
-  let cards = [];
-  let flipped = [];
-  let locked = false;
-  let moves = 0;
-  let matchedPairs = 0;
+const grid = document.getElementById("grid");
+const msg = document.getElementById("msg");
 
-  function updateUI(){
-    movesEl.textContent = `Moves: ${moves}`;
-    pairsEl.textContent = `Pairs: ${matchedPairs}/${photos.length}`;
+// We’ll use the same image for all pairs (you can add more later)
+const images = [
+  "./assets/us1.png",
+  "./assets/us1.png",
+  "./assets/us1.png",
+  "./assets/us1.png",
+  "./assets/us1.png",
+  "./assets/us1.png",
+  "./assets/us1.png",
+  "./assets/us1.png",
+];
+
+function shuffle(arr){
+  for (let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
   }
+  return arr;
+}
 
-  function build(){
-    grid.innerHTML = "";
-    msgEl.textContent = "";
-    moves = 0;
-    matchedPairs = 0;
-    flipped = [];
-    locked = false;
+const deck = shuffle([...images, ...images]).map((src, idx) => ({ id: idx, src }));
 
-    cards = shuffle(photos.flatMap((src, idx) => ([{src, id: idx},{src, id: idx}])));
+let first = null;
+let lock = false;
+let matchedCount = 0;
 
-    cards.forEach((c) => {
-      const el = document.createElement("div");
-      el.className = "mcard";
-      el.dataset.id = String(c.id);
+function makeCard(card){
+  const el = document.createElement("div");
+  el.className = "card-tile";
+  el.dataset.id = card.id;
+  el.dataset.src = card.src;
 
-      el.innerHTML = `
-        <div class="front">💗</div>
-        <div class="back" style="background-image:url('${c.src}')"></div>
-      `;
+  const img = document.createElement("img");
+  img.src = card.src;
+  img.alt = "memory";
+  el.appendChild(img);
 
-      el.addEventListener("click", () => onClick(el));
-      grid.appendChild(el);
-    });
-
-    updateUI();
-  }
-
-  function onClick(el){
-    if (locked) return;
+  el.addEventListener("click", () => {
+    if (lock) return;
     if (el.classList.contains("matched")) return;
-    if (el.classList.contains("flipped")) return;
+    if (el.classList.contains("revealed")) return;
 
-    el.classList.add("flipped");
-    flipped.push(el);
+    el.classList.add("revealed");
 
-    if (flipped.length === 2){
-      moves++;
-      updateUI();
-      checkMatch();
-    }
-  }
-
-  function checkMatch(){
-    const [a,b] = flipped;
-    const match = a.dataset.id === b.dataset.id;
-
-    if (match){
-      a.classList.add("matched");
-      b.classList.add("matched");
-      flipped = [];
-      matchedPairs++;
-      updateUI();
-
-      if (matchedPairs === photos.length){
-        msgEl.textContent = "KEY FOUND 🔑 returning you…";
-        localStorage.setItem("key_memory", "true");
-        setTimeout(() => window.location.href = "./index.html", 1400);
-      }
+    if (!first){
+      first = el;
       return;
     }
 
-    locked = true;
-    setTimeout(() => {
-      a.classList.remove("flipped");
-      b.classList.remove("flipped");
-      flipped = [];
-      locked = false;
-    }, 650);
-  }
+    // second pick
+    const second = el;
+    lock = true;
 
-  resetBtn?.addEventListener("click", build);
-  build();
-});
+    const a = first.dataset.src;
+    const b = second.dataset.src;
+
+    if (a === b){
+      first.classList.add("matched");
+      second.classList.add("matched");
+      matchedCount += 2;
+      first = null;
+      lock = false;
+
+      if (matchedCount === deck.length){
+        msg.textContent = "KEY UNLOCKED 🔑 (going back...)";
+        localStorage.setItem("key_memory", "true");
+        setTimeout(()=> window.location.href="./index.html", 900);
+      }
+    } else {
+      setTimeout(() => {
+        first.classList.remove("revealed");
+        second.classList.remove("revealed");
+        first = null;
+        lock = false;
+      }, 650);
+    }
+  });
+
+  return el;
+}
+
+grid.innerHTML = "";
+deck.forEach(card => grid.appendChild(makeCard(card)));
+msg.textContent = "find the matching pairs 💗";
