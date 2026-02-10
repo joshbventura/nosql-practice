@@ -4,178 +4,42 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>connections</title>
-
-  <!-- use your existing cute style file -->
-  <link rel="stylesheet" href="./style.css" />
-
-  <!-- NYT-like layout CSS (keeps your animation + card look) -->
-  <style>
-    /* page layout */
-    .nyt-wrap{ width:min(920px, 100%); margin:0 auto; position:relative; z-index:2; }
-    .nyt-card{
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 26px;
-      padding: 22px;
-      box-shadow: 0 18px 55px rgba(0,0,0,0.55), 0 0 60px rgba(255,111,182,0.10);
-      backdrop-filter: blur(10px);
-    }
-    .nyt-top{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      margin-bottom: 12px;
-    }
-    .nyt-title{
-      font-weight: 900;
-      color: rgba(255,230,243,0.92);
-      text-align:center;
-      flex:1;
-      font-size: 18px;
-    }
-    .nyt-back{
-      color: rgba(255,230,243,0.85);
-      text-decoration:none;
-      font-weight:800;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
-      padding: 10px 14px;
-      border-radius: 999px;
-    }
-    .nyt-back:hover{ transform: translateY(-1px); }
-
-    /* solved rows */
-    .nyt-solved{ display:flex; flex-direction:column; gap:10px; margin: 10px 0 12px; }
-    .solved-row{
-      border-radius: 14px;
-      padding: 14px 14px;
-      font-weight: 900;
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap:wrap;
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-    .solved-row .items{ font-weight: 800; opacity:.95; }
-
-    /* NYT-ish category colors but “you-coded” */
-    .solved-yellow{ background: rgba(247,227,109,0.20); }
-    .solved-green{  background: rgba(167,224,123,0.18); }
-    .solved-blue{   background: rgba(142,197,255,0.18); }
-    .solved-purple{ background: rgba(197,155,255,0.18); }
-
-    /* grid tiles (NYT-ish) */
-    .nyt-grid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-    @media (max-width: 720px){
-      .nyt-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
-    .nyt-tile{
-      border-radius: 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 18px 10px;
-      text-align:center;
-      font-weight: 900;
-      letter-spacing: .3px;
-      cursor:pointer;
-      user-select:none;
-      color: rgba(255,230,243,0.92);
-      transition: transform .08s ease, background .08s ease, border-color .08s ease;
-    }
-    .nyt-tile:hover{ transform: translateY(-1px); }
-    .nyt-tile.selected{
-      background: rgba(255,111,182,0.14);
-      border-color: rgba(255,111,182,0.45);
-      box-shadow: 0 10px 28px rgba(255,111,182,0.14);
-    }
-
-    .nyt-controls{
-      display:flex;
-      justify-content:center;
-      gap: 14px;
-      margin-top: 18px;
-      flex-wrap:wrap;
-    }
-
-    /* mistakes dots */
-    .nyt-mistakes{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap: 10px;
-      margin-top: 18px;
-      color: rgba(255,230,243,0.85);
-      font-weight:800;
-    }
-    .nyt-dots{ display:inline-flex; gap: 8px; align-items:center; }
-    .dot{
-      width: 12px; height: 12px; border-radius: 50%;
-      background: rgba(255,230,243,0.9);
-    }
-    .dot.used{ background: rgba(255,230,243,0.25); }
-
-    .nyt-msg{
-      text-align:center;
-      margin-top: 10px;
-      min-height: 22px;
-      font-weight: 900;
-      color: rgba(255,230,243,0.90);
-    }
-
-    /* tiny shake animation for wrong submit (cute + NYT-like feedback) */
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      50% { transform: translateX(6px); }
-      75% { transform: translateX(-4px); }
-    }
-    .shake { animation: shake .2s ease-in-out 2; }
-  </style>
+  <link rel="stylesheet" href="./connections.css" />
 </head>
-
 <body>
   <div class="hearts" id="hearts"></div>
   <audio id="bgm" src="./assets/bg.mp3" loop preload="auto"></audio>
-<button class="btn ghost" id="musicBtn" type="button">🎵 play music</button>
 
-<script src="./script.js?v=999" defer></script>
-
-
-  <div class="nyt-wrap">
-    <div class="nyt-card">
-      <div class="nyt-top">
-        <a class="nyt-back" href="./index.html">← back</a>
-        <div class="nyt-title">Create four groups of four!</div>
+  <main class="wrap">
+    <section class="card">
+      <div class="toprow">
+        <a class="back" href="./index.html">← back</a>
+        <div class="headline">Create four groups of four!</div>
         <div style="width:72px;"></div>
       </div>
 
-      <div id="nytSolved" class="nyt-solved"></div>
-      <div id="nytGrid" class="nyt-grid"></div>
+      <div id="nytSolved" class="solved"></div>
 
-      <div class="nyt-mistakes">
-        <span>Mistakes Remaining:</span>
-        <span id="nytDots" class="nyt-dots"></span>
+      <div class="controls">
+        <button id="nytShuffle" class="btn">Shuffle</button>
+        <button id="nytDeselect" class="btn">Deselect All</button>
+        <button id="nytSubmit" class="btn primary">Submit</button>
       </div>
 
-      <div id="nytMsg" class="nyt-msg"></div>
+      <div id="nytGrid" class="grid"></div>
 
-      <div class="nyt-controls">
-        <button class="ghost" id="nytShuffle">Shuffle</button>
-        <button class="ghost" id="nytDeselect">Deselect All</button>
-        <button id="nytSubmit">Submit</button>
+      <div class="footer">
+        <div class="mistakes">
+          <span>Mistakes Remaining:</span>
+          <span id="nytDots" class="dots"></span>
+        </div>
+        <div id="nytMsg" class="msg"></div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
-
-
-  <!-- THIS LINE IS WHAT MAKES THE GAME APPEAR
-  -->
   <script src="./connections.js"></script>
 </body>
+</html>
 
         
