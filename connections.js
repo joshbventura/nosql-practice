@@ -22,10 +22,10 @@ if (hearts){
   Customize these 4 groups: 4 items each, 16 unique items total.
 */
 const GROUPS = [
-  { name: "things i love about adnan", color: "solved-yellow", items: ["GENTLE", "LOYAL", "SMART", "FUNNY"] },
-  { name: "our games",                color: "solved-green",  items: ["MARVEL RIVALS", "PERSONA 5", "GENSHIN", "MINECRAFT"] },
-  { name: "our places",               color: "solved-blue",   items: ["SCRANTON", "CHILI'S", "AIRBNB", "MOVIE NIGHT"] },
-  { name: "songs that feel like us",  color: "solved-purple", items: ["SONG A", "SONG B", "SONG C", "SONG D"] },
+  { name: "things i love about adnan", color: "solved-yellow", items: ["SKIBIDI", "CARING", "LOYAL", "TOP 10"] },
+  { name: "our beloved games",                color: "solved-green",  items: ["MARVEL RIVALS", "PERSONA 5X", "OVERWATCH", "ARKNIGHTS"] },
+  { name: "places we have gooned passionately",               color: "solved-blue",   items: ["SCRANTON", "WILKES-BARRE", "WOODBRIDGE", "WHITE MARSH"] },
+  { name: "songs that remind me of you",  color: "solved-purple", items: ["VERSACE ON THE FLOOR - BRUNO MARS", "MAN I NEED - OLIVIA DEAN", "MYSTERY OF LOVE - SUFJAN STEVENS", "AMAZING - REX ORANGE COUNTY"] },
 ];
 
 const gridEl = document.getElementById("nytGrid");
