@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>memory match</title>
+
+  <link rel="stylesheet" href="./style.css?v=999"/>
+  <script src="./script.js?v=999" defer></script>
+  <script src="./memory.js?v=999" defer></script>
+
+  <style>
+    .game-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px;}
+    .pill2{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);font-weight:800;color:rgba(255,230,243,0.78);}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px;}
+    .mcard{
+      position:relative; aspect-ratio:1/1; border-radius:18px;
+      border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.05);
+      overflow:hidden; cursor:pointer; user-select:none;
+    }
+    .front,.back{position:absolute;inset:0;display:grid;place-items:center;backface-visibility:hidden;transition:transform .22s ease;}
+    .front{transform:rotateY(0deg);font-weight:950;font-size:22px;color:rgba(255,230,243,0.9);}
+    .back{transform:rotateY(180deg);background-size:cover;background-position:center;}
+    .mcard.flipped .front{transform:rotateY(180deg);}
+    .mcard.flipped .back{transform:rotateY(360deg);}
+    .mcard.matched{outline:2px solid rgba(255,111,182,0.55); box-shadow:0 12px 35px rgba(255,111,182,0.15); cursor:default;}
+    @media (max-width:700px){ .grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  </style>
+</head>
+
+<body>
+  <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="card">
+      <a class="btn ghost" href="./index.html" style="max-width:260px;">← back</a>
+
+      <h1 class="title" style="margin-top:14px;">memory match</h1>
+      <div class="subtitle">match the pics. earn a key 🔑</div>
+
+      <audio id="bgm" src="./assets/bg.mp3" loop preload="auto"></audio>
+      <button class="btn ghost" id="musicBtn" type="button" style="max-width:260px;margin:12px auto 0;">
+        🎵 play music
+      </button>
+
+      <div class="game-top">
+        <div class="pill2" id="moves">Moves: 0</div>
+        <div class="pill2" id="pairs">Pairs: 0/6</div>
+        <button class="btn ghost" id="resetMem" type="button" style="max-width:260px;">reset</button>
+      </div>
+
+      <div class="grid" id="memGrid"></div>
+      <div class="ps" id="memMsg"></div>
+    </section>
+  </main>
+</body>
+</html>
