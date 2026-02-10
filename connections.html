@@ -138,7 +138,6 @@
 </head>
 
 <body>
-  <!-- keep your animated hearts -->
   <div class="hearts" id="hearts"></div>
 
   <div class="nyt-wrap">
@@ -150,4 +149,25 @@
       </div>
 
       <div id="nytSolved" class="nyt-solved"></div>
-      <div id="nytGrid" class="nyt-grid">
+      <div id="nytGrid" class="nyt-grid"></div>
+
+      <div class="nyt-mistakes">
+        <span>Mistakes Remaining:</span>
+        <span id="nytDots" class="nyt-dots"></span>
+      </div>
+
+      <div id="nytMsg" class="nyt-msg"></div>
+
+      <div class="nyt-controls">
+        <button class="ghost" id="nytShuffle">Shuffle</button>
+        <button class="ghost" id="nytDeselect">Deselect All</button>
+        <button id="nytSubmit">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THIS LINE IS WHAT MAKES THE GAME APPEAR -->
+  <script src="./connections.js"></script>
+</body>
+
+        
