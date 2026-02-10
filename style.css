@@ -1,0 +1,434 @@
+:root{
+  --bg1:#07060a;
+  --bg2:#120816;
+
+  --pink:#ff6fb6;
+  --pink2:#ff9bd4;
+
+  --text:#ffe6f3;
+  --muted:rgba(255,230,243,0.72);
+
+  --card:rgba(255,255,255,0.06);
+  --card2:rgba(255,255,255,0.10);
+  --border:rgba(255,255,255,0.14);
+  --shadow: 0 30px 80px rgba(0,0,0,0.55);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(900px 600px at 20% 20%, rgba(255,111,182,0.14), transparent 60%),
+    radial-gradient(700px 520px at 85% 20%, rgba(255,155,212,0.12), transparent 55%),
+    radial-gradient(800px 700px at 40% 90%, rgba(190,80,255,0.10), transparent 55%),
+    linear-gradient(160deg, var(--bg1), var(--bg2));
+  overflow-x:hidden;
+}
+
+/* layout */
+.wrap{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:48px 18px;
+}
+
+.card{
+  position:relative; /* IMPORTANT for stickers */
+  width:min(980px, 92vw);
+  padding:44px 44px 34px;
+  border-radius:34px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  overflow: visible;
+}
+
+/* top pill */
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  background: rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.10);
+  color: rgba(255,230,243,0.82);
+  font-weight:700;
+  letter-spacing:0.2px;
+}
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background: var(--pink);
+  box-shadow: 0 0 0 4px rgba(255,111,182,0.18);
+}
+
+/* typography */
+.title{
+  margin:20px 0 6px;
+  font-size: clamp(44px, 7vw, 88px);
+  line-height:1;
+  color: var(--pink2);
+  text-shadow: 0 12px 40px rgba(255,111,182,0.14);
+}
+.subtitle{
+  margin:0 0 18px;
+  color: rgba(255,230,243,0.72);
+  font-weight:800;
+  letter-spacing:0.2px;
+}
+
+.lede, .note-box p{
+  max-width: 62ch;
+  line-height:1.75;
+  font-size: clamp(16px, 1.7vw, 22px);
+}
+
+.lede{
+  margin: 8px 0 22px;
+  color: rgba(255,230,243,0.90);
+}
+
+/* note box */
+.note-box{
+  padding:20px 22px;
+  border-radius:22px;
+  background: rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.10);
+}
+
+.long-note{
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* collapsible */
+.long-note.collapsed{
+  max-height: 120px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+
+/* buttons */
+.btn-row{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:22px;
+}
+
+.btn{
+  border-radius:999px;
+  padding:14px 18px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-weight:800;
+  letter-spacing:0.2px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  flex:1 1 200px;
+  min-width: 180px;
+}
+
+.btn.primary{
+  background: linear-gradient(180deg, rgba(255,111,182,0.95), rgba(255,111,182,0.70));
+  border-color: rgba(255,111,182,0.45);
+  color: #120816;
+  box-shadow: 0 12px 35px rgba(255,111,182,0.18);
+}
+
+.btn.primary.is-glow{
+  animation: pop 0.35s ease-out;
+  box-shadow: 0 18px 60px rgba(255,111,182,0.30);
+}
+
+.btn.ghost:hover{
+  border-color: rgba(255,255,255,0.26);
+  transform: translateY(-1px);
+}
+
+@keyframes pop{
+  0%{ transform: scale(0.98); }
+  60%{ transform: scale(1.02); }
+  100%{ transform: scale(1.0); }
+}
+
+.ps{
+  margin-top:18px;
+  color: rgba(255,230,243,0.55);
+  text-align:center;
+  font-weight:700;
+}
+
+/* stickers */
+.sticker{
+  position:absolute;
+  height:auto;
+  pointer-events:none;
+  user-select:none;
+  filter: drop-shadow(0 12px 25px rgba(0,0,0,0.45));
+  opacity:0.95;
+}
+
+.sticker-left{
+  width: 120px;
+  top: -55px;
+  left: 22px;
+  transform: rotate(-6deg);
+}
+
+.sticker-right{
+  width: 150px;
+  bottom: -70px;
+  right: -24px;
+  transform: rotate(7deg);
+  animation: floaty 3.2s ease-in-out infinite;
+}
+
+@keyframes floaty{
+  0%,100%{ transform: translateY(0) rotate(7deg); }
+  50%{ transform: translateY(-10px) rotate(7deg); }
+}
+
+/* hearts background */
+.hearts{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+
+/* card above hearts */
+.wrap, .card{
+  position:relative;
+  z-index:1;
+}
+
+/* individual hearts */
+.heart{
+  position:absolute;
+  width:14px;
+  height:14px;
+  background: rgba(255,111,182,0.45);
+  transform: rotate(45deg);
+  border-radius: 3px;
+  filter: blur(0.2px);
+  animation: drift linear forwards;
+}
+.heart:before, .heart:after{
+  content:"";
+  position:absolute;
+  width:14px;
+  height:14px;
+  background: rgba(255,111,182,0.45);
+  border-radius:50%;
+}
+.heart:before{ left:-7px; top:0; }
+.heart:after{ left:0; top:-7px; }
+
+@keyframes drift{
+  from{ transform: translateY(20px) rotate(45deg); opacity:0; }
+  10%{ opacity: 0.85; }
+  to{ transform: translateY(-120vh) rotate(45deg); opacity:0; }
+}
+
+/* mobile */
+@media (max-width:700px){
+  .card{ padding: 34px 22px 26px; border-radius: 28px; }
+  .sticker-left{ width: 95px; top:-40px; left: 14px; }
+  .sticker-right{ width: 115px; bottom:-52px; right: -10px; }
+  .btn{ min-width: 150px; }
+}
+
+/* ===== NYT-like connections styling ===== */
+.nyt-card .nyt-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 10px;
+}
+
+.nyt-title{
+  font-weight:900;
+  letter-spacing:0.2px;
+  color: rgba(255,230,243,0.92);
+  font-size: clamp(18px, 2.2vw, 24px);
+  text-align:center;
+  flex:1;
+}
+
+.nyt-sub{
+  color: rgba(255,230,243,0.65);
+  margin-bottom: 18px;
+  font-weight:700;
+}
+
+.nyt-controls{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom: 18px;
+}
+
+.nyt-grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tile{
+  padding: 16px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,230,243,0.92);
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  cursor:pointer;
+  transition: transform .08s ease, border-color .15s ease, background .15s ease;
+  min-height: 58px;
+
+  /* IMPORTANT: prevent long text from bleeding */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tile:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.25);
+}
+
+.tile.selected{
+  background: rgba(255,111,182,0.16);
+  border-color: rgba(255,111,182,0.45);
+}
+
+.nyt-solved{
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.solved-row{
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+
+.solved-name{
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 6px;
+}
+
+.solved-items{
+  color: rgba(255,230,243,0.75);
+  font-weight: 700;
+}
+
+.solved-yellow{ background: rgba(255,225,120,0.10); border-color: rgba(255,225,120,0.25); }
+.solved-green{  background: rgba(140,255,180,0.10); border-color: rgba(140,255,180,0.25); }
+.solved-blue{   background: rgba(120,190,255,0.10); border-color: rgba(120,190,255,0.25); }
+.solved-purple{ background: rgba(200,140,255,0.10); border-color: rgba(200,140,255,0.25); }
+
+.nyt-footer{
+  margin-top: 14px;
+  text-align:center;
+}
+
+.nyt-msg{
+  color: rgba(255,230,243,0.72);
+  font-weight: 900;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+}
+.shake { animation: shake .2s ease-in-out 2; }
+
+@media (max-width: 700px){
+  .nyt-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Make ALL buttons match your site vibe */
+/* Force all buttons to match site aesthetic */
+button {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  color: #f5e6ef;
+  border-radius: 16px;
+  padding: 12px 20px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all .15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.3);
+}
+
+button:active {
+  transform: translateY(0px);
+}
+
+/* Make submit pink */
+#submitBtn,
+#submit,
+button.primary {
+  background: linear-gradient(180deg, #ff7ac8, #e056a8);
+  border: none;
+  color: white;
+}
+
+
+/* optional: make primary button pink */
+button.primary {
+  background: linear-gradient(180deg, rgba(255, 105, 180, 0.85), rgba(255, 105, 180, 0.65));
+  border-color: rgba(255, 105, 180, 0.45);
+}
+
+.btn.locked{
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+.btn.locked:hover{
+  transform: none !important;
+}
+
+.lock-hint{
+  margin-top: 10px;
+  color: rgba(255,230,243,0.65);
+  font-weight: 700;
+}
+
