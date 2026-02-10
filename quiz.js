@@ -1,63 +1,64 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const quizBox = document.getElementById("quizBox");
-  const msg = document.getElementById("quizMsg");
+// music resume
+(function(){
+  const bgm = document.getElementById("bgm");
+  if (!bgm) return;
+  bgm.volume = 0.2;
+  const t = localStorage.getItem("music_time");
+  if (t) bgm.currentTime = parseFloat(t);
+  const wasOn = localStorage.getItem("music_on") === "true";
+  if (wasOn) bgm.play().catch(()=>{});
+  setInterval(() => {
+    if (!bgm.paused) localStorage.setItem("music_time", String(bgm.currentTime));
+  }, 700);
+})();
 
-  const QUESTIONS = [
-    {
-      q: "what game do we both love the most?",
-      choices: ["MARVEL RIVALS", "tetris", "candy crush", "solitaire"],
-      answer: "MARVEL RIVALS",
-    },
-    {
-      q: "where was our first meet-up trip?",
-      choices: ["SCRANTON", "miami", "tokyo", "london"],
-      answer: "SCRANTON",
-    },
-    {
-      q: "what’s my official job?",
-      choices: ["love you forever", "ignore you", "tax you", "none"],
-      answer: "love you forever",
-    },
-  ];
+// hearts
+(function(){
+  const hearts = document.getElementById("hearts");
+  if (!hearts) return;
+  for (let i=0;i<22;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom=(-10-Math.random()*30)+"vh";
+    h.style.animationDuration=(8+Math.random()*8)+"s";
+    h.style.animationDelay=(-Math.random()*10)+"s";
+    h.style.opacity=(0.25+Math.random()*0.6);
+    const s=10+Math.random()*18;
+    h.style.width=s+"px"; h.style.height=s+"px";
+    hearts.appendChild(h);
+  }
+})();
 
-  let i = 0;
-  let score = 0;
+const msg = document.getElementById("msg");
+const picked = new Map(); // q -> right/wrong
 
-  function render(){
-    const cur = QUESTIONS[i];
-    quizBox.innerHTML = `
-      <h3>Q${i+1}. ${cur.q}</h3>
-      <div class="choices">
-        ${cur.choices.map(c => `<button class="btn ghost choice" type="button" data-choice="${c}">${c}</button>`).join("")}
-      </div>
-    `;
+function checkWin(){
+  if (picked.size < 3) return;
+  const allRight = Array.from(picked.values()).every(v => v === "right");
+  if (allRight){
+    msg.textContent = "KEY UNLOCKED 🔑 (going back...)";
+    localStorage.setItem("key_quiz", "true");
+    setTimeout(()=> window.location.href="./index.html", 900);
+  } else {
+    msg.textContent = "not quite 😭 try again (pick better answers)";
+  }
+}
 
-    quizBox.querySelectorAll("[data-choice]").forEach(btn => {
-      btn.addEventListener("click", () => pick(btn.dataset.choice));
+document.querySelectorAll(".opt").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const q = btn.dataset.q;
+    const a = btn.dataset.a;
+
+    // clear styles in that question
+    document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(b => {
+      b.classList.remove("correct","wrong");
     });
 
-    msg.textContent = "";
-  }
+    btn.classList.add(a === "right" ? "correct" : "wrong");
+    picked.set(q, a);
 
-  function pick(choice){
-    const cur = QUESTIONS[i];
-    if (choice === cur.answer) score++;
-
-    i++;
-    if (i >= QUESTIONS.length){
-      if (score === QUESTIONS.length){
-        msg.textContent = "PERFECT 🔑 key earned! returning you…";
-        localStorage.setItem("key_quiz", "true");
-        setTimeout(() => window.location.href="./index.html", 1400);
-      } else {
-        msg.textContent = `you got ${score}/${QUESTIONS.length} 😭 try again`;
-        i = 0; score = 0;
-        setTimeout(render, 900);
-      }
-      return;
-    }
-    render();
-  }
-
-  render();
+    checkWin();
+  });
 });
+
