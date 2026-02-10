@@ -193,6 +193,89 @@
       transform: rotate(12deg);
       pointer-events:none;
     }
+
+
+    .conn { margin-top: 22px; }
+.conn h2{
+  margin: 10px 0 6px;
+  font-size: 22px;
+  color: var(--pink2);
+  text-shadow: 0 0 12px rgba(255,111,182,0.22);
+}
+.conn-sub{
+  margin: 0 0 14px;
+  color: rgba(255,230,243,0.70);
+  font-size: 14px;
+}
+
+.conn-controls{
+  display:flex; gap:10px; flex-wrap:wrap;
+  margin-bottom: 12px;
+}
+
+.conn-grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 700px){
+  .conn-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.tile{
+  user-select:none;
+  cursor:pointer;
+  padding: 14px 10px;
+  border-radius: 16px;
+  text-align:center;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,230,243,0.92);
+  transition: transform .10s ease, border-color .10s ease, box-shadow .10s ease;
+}
+
+.tile:hover{ transform: translateY(-1px); }
+
+.tile.selected{
+  border-color: rgba(255,111,182,0.55);
+  box-shadow: 0 10px 28px rgba(255,111,182,0.14);
+  background: rgba(255,111,182,0.12);
+}
+
+.tile.locked{
+  cursor:default;
+  opacity: 0.65;
+  background: rgba(0,0,0,0.18);
+}
+
+.conn-msg{
+  margin-top: 12px;
+  color: rgba(255,230,243,0.85);
+  min-height: 22px;
+}
+
+.solved-card{
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+}
+
+.solved-title{
+  font-weight: 800;
+  color: var(--pink2);
+  margin-bottom: 6px;
+}
+
+.solved-items{
+  color: rgba(255,230,243,0.9);
+  line-height: 1.6;
+}
+
   </style>
 </head>
 
@@ -228,6 +311,23 @@
           — love, me 💞
         </p>
       </div>
+
+      <div class="conn">
+  <h2>connections: adnan edition 🧩🩷</h2>
+  <p class="conn-sub">pick 4 that belong together. 4 groups total. don’t overthink (but also… do).</p>
+
+  <div class="conn-controls">
+    <button class="ghost" id="connShuffle">shuffle</button>
+    <button class="ghost" id="connDeselect">deselect</button>
+    <button id="connSubmit">submit</button>
+  </div>
+
+  <div class="conn-grid" id="connGrid"></div>
+
+  <div class="conn-msg" id="connMsg"></div>
+  <div class="conn-solved" id="connSolved"></div>
+</div>
+
 
       <div class="footer">
         ps: if you found this page by accident… no you didn’t.
@@ -288,6 +388,209 @@
         setTimeout(() => p.remove(), 1300);
       }
     });
+
+    <script>
+/* ------------------ CONNECTIONS GAME ------------------ */
+/*
+  Edit THESE 4 groups to your real stuff.
+  Each group must have exactly 4 items.
+*/
+const GROUPS = [
+  {
+    name: "things that make adnan adnan",
+    items: ["GENTLE", "SMART", "LOYAL", "FUNNY"]
+  },
+  {
+    name: "our games",
+    items: ["MARVEL RIVALS", "PERSONA 5", "GENSHIN", "MINECRAFT"]
+  },
+  {
+    name: "our places / memories",
+    items: ["SCRANTON", "CHILI'S", "AIRBNB", "MOVIE NIGHT"]
+  },
+  {
+    name: "songs that feel like us",
+    items: ["SONG A", "SONG B", "SONG C", "SONG D"]
+  }
+];
+
+// state
+let tiles = [];
+let selected = new Set();
+let solvedGroups = [];
+let locked = new Set();
+
+const gridEl = document.getElementById("connGrid");
+const msgEl = document.getElementById("connMsg");
+const solvedEl = document.getElementById("connSolved");
+
+const btnShuffle = document.getElementById("connShuffle");
+const btnDeselect = document.getElementById("connDeselect");
+const btnSubmit = document.getElementById("connSubmit");
+
+function flattenGroups(){
+  const all = [];
+  for (const g of GROUPS) for (const it of g.items) all.push(it);
+  // quick sanity check
+  const s = new Set(all);
+  if (all.length !== 16 || s.size !== 16) {
+    console.warn("Connections setup issue: need 16 unique items total.");
+  }
+  return all;
+}
+
+function shuffle(array){
+  for (let i = array.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function render(){
+  gridEl.innerHTML = "";
+  for (const word of tiles){
+    const div = document.createElement("div");
+    div.className = "tile";
+    div.textContent = word;
+
+    if (selected.has(word)) div.classList.add("selected");
+    if (locked.has(word)) div.classList.add("locked");
+
+    div.addEventListener("click", () => {
+      if (locked.has(word)) return;
+
+      if (selected.has(word)) selected.delete(word);
+      else {
+        if (selected.size >= 4) return; // max 4
+        selected.add(word);
+      }
+      msgEl.textContent = "";
+      render();
+    });
+
+    gridEl.appendChild(div);
+  }
+
+  // solved display
+  solvedEl.innerHTML = "";
+  for (const sg of solvedGroups){
+    const card = document.createElement("div");
+    card.className = "solved-card";
+    card.innerHTML = `
+      <div class="solved-title">✅ ${escapeHtml(sg.name)}</div>
+      <div class="solved-items">${sg.items.map(escapeHtml).join(" · ")}</div>
+    `;
+    solvedEl.appendChild(card);
+  }
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function findGroupForSelection(selArr){
+  // returns exact matching group index or -1
+  const selSet = new Set(selArr);
+  for (let i=0; i<GROUPS.length; i++){
+    const g = GROUPS[i];
+    const gSet = new Set(g.items);
+    let matchCount = 0;
+    for (const w of selSet) if (gSet.has(w)) matchCount++;
+    if (matchCount === 4) return i;
+  }
+  return -1;
+}
+
+function oneAway(selArr){
+  // true if selection contains exactly 3 from any unsolved group
+  const selSet = new Set(selArr);
+  for (const g of GROUPS){
+    // skip already solved
+    if (solvedGroups.some(sg => sg.name === g.name)) continue;
+
+    let c = 0;
+    for (const w of selSet) if (g.items.includes(w)) c++;
+    if (c === 3) return true;
+  }
+  return false;
+}
+
+function lockGroup(group){
+  for (const w of group.items) locked.add(w);
+  solvedGroups.push(group);
+
+  // remove locked tiles from main grid order to feel like NYT (optional vibe)
+  tiles = tiles.filter(w => !locked.has(w)).concat(group.items);
+}
+
+function resetGame(){
+  tiles = shuffle(flattenGroups());
+  selected = new Set();
+  solvedGroups = [];
+  locked = new Set();
+  msgEl.textContent = "";
+  render();
+}
+
+btnShuffle?.addEventListener("click", () => {
+  // shuffle only the unlocked tiles
+  const unlocked = tiles.filter(w => !locked.has(w));
+  const lockedOnes = tiles.filter(w => locked.has(w));
+  tiles = shuffle(unlocked).concat(lockedOnes);
+  msgEl.textContent = "";
+  render();
+});
+
+btnDeselect?.addEventListener("click", () => {
+  selected.clear();
+  msgEl.textContent = "";
+  render();
+});
+
+btnSubmit?.addEventListener("click", () => {
+  if (selected.size !== 4){
+    msgEl.textContent = "pick exactly 4 🫵";
+    return;
+  }
+
+  const selArr = Array.from(selected);
+  const idx = findGroupForSelection(selArr);
+
+  if (idx !== -1){
+    const g = GROUPS[idx];
+    // avoid double-solving
+    if (!solvedGroups.some(sg => sg.name === g.name)){
+      lockGroup(g);
+      msgEl.textContent = "✅ nailed it.";
+    } else {
+      msgEl.textContent = "you already solved that bestie 😭";
+    }
+  } else if (oneAway(selArr)){
+    msgEl.textContent = "🟨 one away… you’re so close.";
+  } else {
+    msgEl.textContent = "❌ nope. but i respect the confidence.";
+  }
+
+  selected.clear();
+
+  // win condition
+  if (solvedGroups.length === 4){
+    msgEl.textContent = "🏆 YOU WON. ok genius.";
+  }
+
+  render();
+});
+
+// start
+resetGame();
+</script>
+
   </script>
 </body>
 </html>
