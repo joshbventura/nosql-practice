@@ -41,15 +41,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // click for more = cute glow + little text swap
-  if (clickMore) {
-    let flipped = false;
+// ---- LOCK / UNLOCK LOGIC ----
+if (clickMore) {
+  const unlocked = localStorage.getItem("adnan_connections_unlocked") === "true";
+
+  if (unlocked) {
+    clickMore.disabled = false;
+    clickMore.classList.remove("locked");
+    clickMore.textContent = "click for more 💗";
+
     clickMore.addEventListener("click", () => {
-      clickMore.classList.toggle("is-glow");
-      flipped = !flipped;
-      clickMore.textContent = flipped ? "ok i’m soft now 🥺" : "click for more 💗";
+      window.location.href = "./valentine.html";
     });
+  } else {
+    clickMore.disabled = true;
+    clickMore.classList.add("locked");
+    clickMore.textContent = "🔒 locked — solve connections";
   }
+}
+
 });
 
 
