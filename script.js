@@ -239,3 +239,15 @@ if (btnSubmit){
 // start
 resetGame();
 
+
+const note = document.getElementById("note");
+const toggleBtn = document.getElementById("toggleNote");
+
+if (note && toggleBtn) {
+  toggleBtn.addEventListener("click", () => {
+    note.classList.toggle("collapsed");
+    toggleBtn.textContent = note.classList.contains("collapsed") ? "read more" : "show less";
+  });
+}
+
+
